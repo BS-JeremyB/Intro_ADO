@@ -82,13 +82,8 @@ namespace Archi_Cyber_ADO
             }
         }
 
-        public static void GetStudentById()
+        public static void GetStudentById(int id)
         {
-            Console.WriteLine("------- AFFICHER UN ETUDIANT ------");
-            Console.Write("Veuillez entrer l'id de l'étudiant à récupérer : ");
-            int id = int.Parse(Console.ReadLine());
-
-
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 using (SqlCommand command = connection.CreateCommand())
@@ -122,12 +117,8 @@ namespace Archi_Cyber_ADO
         }
 
 
-        public static void GetStudentByLogin()
+        public static void GetStudentByLogin(string login)
         {
-            Console.WriteLine("------- AFFICHER UN ETUDIANT VIA LOGIN ------");
-            Console.Write("Veuillez entrer votre Login : ");
-            string login = Console.ReadLine();
-
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -162,11 +153,8 @@ namespace Archi_Cyber_ADO
         }
 
 
-        public static void DeleteStudent()
+        public static void DeleteStudent(int id)
         {
-            Console.WriteLine("------- SUPPRIMER UN ETUDIANT ------");
-            Console.Write("Veuillez entrer l'id de l'étudiant à supprimer : ");
-            int id = int.Parse(Console.ReadLine());
 
             using(SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -198,15 +186,8 @@ namespace Archi_Cyber_ADO
         }
 
 
-        public static void AddStudent()
+        public static void AddStudent(string nom, string prenom, string login, string course)
         { 
-            Console.WriteLine("------- AJOUTER UN ETUDIANT ------");
-            Console.Write("Veuillez entrer le nom : ");
-            string nom = Console.ReadLine();        
-            Console.Write("Veuillez entrer le Prénom : ");
-            string prenom = Console.ReadLine();
-            string login = prenom.Substring(0, 1) + nom;
-            string course = "EG2210";
 
             using (SqlConnection connection = new SqlConnection(connectionString)) 
             {
@@ -232,6 +213,41 @@ namespace Archi_Cyber_ADO
                 }
 
             }
+        }
+
+
+        public static void UpdateStudent(int id, string nom, string prenom)
+        {
+            using(SqlConnection connection = new SqlConnection(connectionString))
+            {
+                using(SqlCommand command = connection.CreateCommand())
+                {
+                    command.CommandText = "UPDATE STUDENT SET last_name = @nom, first_name = @prenom WHERE student_id = @id";
+                    command.CommandType = CommandType.Text;
+
+                    command.Parameters.AddWithValue("@nom", nom);
+                    command.Parameters.AddWithValue("@prenom", prenom);
+                    command.Parameters.AddWithValue("@id", id);
+
+                    connection.Open();
+                    int nbrRow = command.ExecuteNonQuery();
+                    connection.Close();
+
+                    if (nbrRow > 0)
+                    {
+                        Console.WriteLine("La mise à jour à été effectuée");
+                    }
+                    else
+                    {
+                        Console.WriteLine("La mise à jour");
+                    }
+
+                    Console.ReadLine();
+                    Console.Clear();
+
+                }
+            }
+
         }
 
 
